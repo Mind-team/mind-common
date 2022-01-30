@@ -1,3 +1,4 @@
+import { useCache } from "../../cache";
 import { IHttpResponseError, useHttp } from "../../http";
 import { useEndpoint } from "../endpoint.hook";
 import {
@@ -55,6 +56,8 @@ const driver = async (accessToken: string, apiVersion = "v4") => {
 };
 
 export const useDriverApi = (accessToken: string) => {
+  const cache = useCache();
+
   return {
     login,
     sendConfirmationCode,
