@@ -1,0 +1,1 @@
+export * from "./get-last-parking-process/get-last-parking-process.dto";
