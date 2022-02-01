@@ -4,7 +4,7 @@ import { IHttpResponseError } from "./http-response-error.interface";
 export const useHttp = () => {
   return async <Req, Res>(
     configObject: IHttpRequest<Req>
-  ): Promise<Res | IHttpResponseError | {}> => {
+  ): Promise<Res | IHttpResponseError | { isEmptyResponse: true }> => {
     if (!configObject || !configObject.url || !configObject.method) {
       throw new Error(
         "You didn't specify a required parameter for the request"
@@ -17,9 +17,16 @@ export const useHttp = () => {
           body: JSON.stringify(configObject.body),
           headers: "headers" in configObject ? configObject.headers : {},
         });
-        return await response.json();
+        try {
+          return await response.json();
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            return { isEmptyResponse: true };
+          }
+          throw e;
+        }
       } catch (e) {
-        return {};
+        throw e;
       }
     }
     try {
@@ -27,9 +34,16 @@ export const useHttp = () => {
         method: "GET",
         headers: "headers" in configObject ? configObject.headers : {},
       });
-      return await response.json();
+      try {
+        return await response.json();
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          return { isEmptyResponse: true };
+        }
+        throw e;
+      }
     } catch (e) {
-      return {};
+      throw e;
     }
   };
 };

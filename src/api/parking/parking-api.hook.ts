@@ -1,4 +1,4 @@
-import { useHttp } from "../../http";
+import { IHttpResponseError, useHttp } from "../../http";
 import { useEndpoint } from "../endpoint.hook";
 import { GetLastParkingProcessDto } from "./dto";
 
@@ -12,7 +12,7 @@ const lastParkingProcess = async (
   if (!accessToken) {
     throw new Error("You didn't specify access token in parking api hook");
   }
-  return await request<null, GetLastParkingProcessDto>({
+  return await request<null, GetLastParkingProcessDto | IHttpResponseError>({
     url: endpoint + appVersion + "/parking/pp/last",
     method: "GET",
     headers: {
