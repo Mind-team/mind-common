@@ -58,7 +58,7 @@ const parkingProcesses = async (accessToken: string, appVersion = "v4") => {
     throw new Error("You didn't specify access token in driver api hook");
   }
   return await request<null, GetPPResponseDto[]>({
-    url: endpoint + appVersion + "/driver/pp",
+    url: endpoint + appVersion + "/driver/parking-processes",
     method: "GET",
     headers: {
       "Content-Type": "application/json",
